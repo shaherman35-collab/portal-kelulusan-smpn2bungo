@@ -813,7 +813,7 @@ body.dark-mode .tbl tr:hover td { background: #1e3a5f !important; }
   <div class="lp-jadwal-box">
     <div class="lp-jadwal-label">📅 Jadwal Pengumuman Resmi</div>
     <div class="lp-jadwal-date" id="lp-jadwal-tgl">2 – 7 Juni 2026</div>
-    <div class="lp-jadwal-time" id="lp-jadwal-jam">Portal dibuka penuh 2 Juni s.d. 7 Juni 2026 &nbsp;·&nbsp; SMP Negeri 2 Bungo</div>
+    <div class="lp-jadwal-time" id="lp-jadwal-jam">Dibuka 2 Juni jam 18.00 s.d. 7 Juni 2026 &nbsp;·&nbsp; SMP Negeri 2 Bungo</div>
     <div id="countdown-wrap" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.15);text-align:center">
       <div id="cd-label" style="font-family:'Poppins',sans-serif;font-size:11px;font-weight:600;color:rgba(255,215,0,.7);text-transform:uppercase;letter-spacing:2px;margin-bottom:.75rem">⏳ Portal dibuka dalam</div>
       <div id="countdown-display" style="display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap"></div>
@@ -968,7 +968,7 @@ function hideLoginAdmin(){
 <h3>📅 Pengaturan Jadwal Pengumuman</h3>
 <div class="jdwl-grid">
 <div class="jdwl-item"><label>Tanggal Pengumuman</label><input type="date" id="j-tgl" value="2026-06-02"/></div>
-<div class="jdwl-item"><label>Jam Mulai</label><input type="time" id="j-mulai" value="00:00"/></div>
+<div class="jdwl-item"><label>Jam Mulai</label><input type="time" id="j-mulai" value="18:00"/></div>
 <div class="jdwl-item"><label>Jam Selesai</label><input type="time" id="j-selesai" value="23:59"/></div>
 <div class="jdwl-item"><label>Lokasi / Keterangan</label><input type="text" id="j-lokasi" value="SMP Negeri 2 Bungo"/></div>
 </div>
@@ -1134,7 +1134,7 @@ function loginAdmin(){
 }
 function goSiswa(){
   const now=new Date();
-  const tglMulai=new Date((jadwal.tgl||'2026-06-02')+'T00:00:00');
+  const tglMulai=new Date((jadwal.tgl||'2026-06-02')+'T18:00:00');
   const tglAkhir=new Date((jadwal.tglSelesai||jadwal.tgl||'2026-06-07')+'T23:59:59');
   if(now<tglMulai){
     showLocked('belum');return;
@@ -1359,7 +1359,7 @@ function updateLandingJadwal(){
     const akhir=jadwal.tglSelesai||jadwal.tgl;
     elTgl.textContent='2 – 7 Juni 2026';
   }
-  if(elJam) elJam.textContent='Portal dibuka penuh 2 Juni s.d. 7 Juni 2026 · '+(jadwal.lokasi||'SMP Negeri 2 Bungo');
+  if(elJam) elJam.textContent='Dibuka 2 Juni jam 18.00 s.d. 7 Juni 2026 · '+(jadwal.lokasi||'SMP Negeri 2 Bungo');
   // Update input di form admin sesuai data tersimpan
   const inp=document.getElementById('j-tgl');
   if(inp && jadwal.tgl) inp.value=jadwal.tgl;
@@ -1376,7 +1376,7 @@ updateLandingJadwal();
 
 function updateCountdown(){
   if(!jadwal.tgl) return;
-  const target=new Date((jadwal.tgl||'2026-06-02')+'T00:00:00');
+  const target=new Date((jadwal.tgl||'2026-06-02')+'T18:00:00');
   const now=new Date();
   const diff=target-now;
   const cdWrap=document.getElementById('countdown-display');
