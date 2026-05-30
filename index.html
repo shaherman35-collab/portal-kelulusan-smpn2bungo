@@ -812,8 +812,8 @@ body.dark-mode .tbl tr:hover td { background: #1e3a5f !important; }
   <!-- JADWAL + COUNTDOWN -->
   <div class="lp-jadwal-box">
     <div class="lp-jadwal-label">📅 Jadwal Pengumuman Resmi</div>
-    <div class="lp-jadwal-date" id="lp-jadwal-tgl">Sabtu, 13 Juni 2026</div>
-    <div class="lp-jadwal-time" id="lp-jadwal-jam">Pukul 08.00 – 12.00 WIB &nbsp;·&nbsp; SMP Negeri 2 Bungo</div>
+    <div class="lp-jadwal-date" id="lp-jadwal-tgl">2 – 7 Juni 2026</div>
+    <div class="lp-jadwal-time" id="lp-jadwal-jam">Portal dibuka penuh 2 Juni s.d. 7 Juni 2026 &nbsp;·&nbsp; SMP Negeri 2 Bungo</div>
     <div id="countdown-wrap" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.15);text-align:center">
       <div id="cd-label" style="font-family:'Poppins',sans-serif;font-size:11px;font-weight:600;color:rgba(255,215,0,.7);text-transform:uppercase;letter-spacing:2px;margin-bottom:.75rem">⏳ Portal dibuka dalam</div>
       <div id="countdown-display" style="display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap"></div>
@@ -886,10 +886,10 @@ setInterval(updateClock, 1000);
 // TICKER
 const tickerMsgs = [
   '🎓 Selamat kepada seluruh peserta didik kelas IX SMP Negeri 2 Bungo',
-  '📢 Pengumuman kelulusan resmi: Sabtu, 13 Juni 2026 pukul 08.00 WIB',
+  '📢 Portal kelulusan dibuka: 2 Juni – 7 Juni 2026',
   '🌟 Terima kasih telah berjuang dan pantang menyerah',
   '🎓 Selamat kepada seluruh peserta didik kelas IX SMP Negeri 2 Bungo',
-  '📢 Pengumuman kelulusan resmi: Sabtu, 13 Juni 2026 pukul 08.00 WIB',
+  '📢 Portal kelulusan dibuka: 2 Juni – 7 Juni 2026',
   '🌟 Terima kasih telah berjuang dan pantang menyerah',
 ];
 const ti = document.getElementById('ticker-inner');
@@ -967,9 +967,9 @@ function hideLoginAdmin(){
 <div class="card">
 <h3>📅 Pengaturan Jadwal Pengumuman</h3>
 <div class="jdwl-grid">
-<div class="jdwl-item"><label>Tanggal Pengumuman</label><input type="date" id="j-tgl" value="2026-06-13"/></div>
-<div class="jdwl-item"><label>Jam Mulai</label><input type="time" id="j-mulai" value="08:00"/></div>
-<div class="jdwl-item"><label>Jam Selesai</label><input type="time" id="j-selesai" value="12:00"/></div>
+<div class="jdwl-item"><label>Tanggal Pengumuman</label><input type="date" id="j-tgl" value="2026-06-02"/></div>
+<div class="jdwl-item"><label>Jam Mulai</label><input type="time" id="j-mulai" value="00:00"/></div>
+<div class="jdwl-item"><label>Jam Selesai</label><input type="time" id="j-selesai" value="23:59"/></div>
 <div class="jdwl-item"><label>Lokasi / Keterangan</label><input type="text" id="j-lokasi" value="SMP Negeri 2 Bungo"/></div>
 </div>
 <button class="btn-save" onclick="saveJadwal()">💾 Simpan Jadwal</button>
@@ -1110,7 +1110,7 @@ let jadwal=(function(){
     const saved=localStorage.getItem('jadwal_smpn2bungo');
     if(saved) return JSON.parse(saved);
   }catch(e){}
-  return {tgl:'2026-06-13',mulai:'08:00',selesai:'12:00',lokasi:'SMP Negeri 2 Bungo'};
+  return {tgl:'2026-06-02',mulai:'00:00',tglSelesai:'2026-06-07',selesai:'23:59',lokasi:'SMP Negeri 2 Bungo'};
 })();
 let pesanLulus='Selamat! Anda dinyatakan LULUS dari SMP Negeri 2 Bungo. Semangat terus dan raih cita-cita setinggi langit! Terima kasih telah menjadi bagian dari keluarga besar SMPN 2 Bungo.';
 let pesanTidak='Jangan berkecil hati. Kegagalan adalah kesempatan untuk bangkit lebih kuat. Teruslah belajar dan berusaha. Kami percaya kamu bisa!';
@@ -1134,12 +1134,12 @@ function loginAdmin(){
 }
 function goSiswa(){
   const now=new Date();
-  const tglTgt=new Date(jadwal.tgl+'T'+jadwal.mulai+':00');
-  const tglEnd=new Date(jadwal.tgl+'T'+jadwal.selesai+':00');
-  if(now<tglTgt){
+  const tglMulai=new Date((jadwal.tgl||'2026-06-02')+'T00:00:00');
+  const tglAkhir=new Date((jadwal.tglSelesai||jadwal.tgl||'2026-06-07')+'T23:59:59');
+  if(now<tglMulai){
     showLocked('belum');return;
   }
-  if(now>tglEnd){
+  if(now>tglAkhir){
     showLocked('selesai');return;
   }
   sc('siswa');updateJadwalPill();
@@ -1155,7 +1155,7 @@ function showLocked(type){
       <div class="locked-icon">${type==='belum'?'🔒':'✅'}</div>
       <div class="locked-title">${type==='belum'?'Portal Belum Dibuka':'Portal Sudah Ditutup'}</div>
       <div class="locked-sub">${type==='belum'?'Portal kelulusan akan dibuka sesuai jadwal resmi sekolah.':'Waktu akses portal kelulusan telah berakhir. Hubungi pihak sekolah untuk informasi lebih lanjut.'}</div>
-      ${type==='belum'?`<div class="locked-time">${fmtTgl(jadwal.tgl)}</div><div class="locked-jam">Pukul ${jadwal.mulai} – ${jadwal.selesai} WIB</div>`:''}
+      ${type==='belum'?`<div class="locked-time">2 – 7 Juni 2026</div><div class="locked-jam">Portal belum dibuka</div>`:''}
       <button style="margin-top:1.5rem;padding:12px 24px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:white;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit" onclick="document.getElementById('locked-overlay').remove()">← Kembali</button>
     </div>`;
     document.body.appendChild(div);
@@ -1355,8 +1355,11 @@ function updateLandingJadwal(){
   // Update tanggal di halaman utama
   const elTgl=document.getElementById('lp-jadwal-tgl');
   const elJam=document.getElementById('lp-jadwal-jam');
-  if(elTgl && jadwal.tgl) elTgl.textContent=fmtTglPanjang(jadwal.tgl);
-  if(elJam && jadwal.mulai) elJam.textContent='Pukul '+jadwal.mulai.replace(':','.')+' – '+jadwal.selesai.replace(':','.')+' WIB · '+jadwal.lokasi;
+  if(elTgl && jadwal.tgl){
+    const akhir=jadwal.tglSelesai||jadwal.tgl;
+    elTgl.textContent='2 – 7 Juni 2026';
+  }
+  if(elJam) elJam.textContent='Portal dibuka penuh 2 Juni s.d. 7 Juni 2026 · '+(jadwal.lokasi||'SMP Negeri 2 Bungo');
   // Update input di form admin sesuai data tersimpan
   const inp=document.getElementById('j-tgl');
   if(inp && jadwal.tgl) inp.value=jadwal.tgl;
@@ -1373,7 +1376,7 @@ updateLandingJadwal();
 
 function updateCountdown(){
   if(!jadwal.tgl) return;
-  const target=new Date(jadwal.tgl+'T'+jadwal.mulai+':00');
+  const target=new Date((jadwal.tgl||'2026-06-02')+'T00:00:00');
   const now=new Date();
   const diff=target-now;
   const cdWrap=document.getElementById('countdown-display');
